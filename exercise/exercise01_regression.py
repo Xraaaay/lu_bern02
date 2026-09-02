@@ -33,12 +33,13 @@ def local_regression(x, y, k, x_0):
 
     # calculate predicted value and standard deviation
     pred = beta_0 + beta_1 * x_0
-    se = 0  # TODO
+    se = np.sqrt(np.sum((y - beta_0 - beta_1 * x)**2) / (k - 2))
     return pred, se
 
 # %% Cross Validation
+# TODO
 def cross_validate():
-    return 20
+    return 15
 
 # %% Loda Data
 data_path = "./data/pollution_cleaneddata.csv"
@@ -64,3 +65,7 @@ for x_0 in x_0_list:
 print(preds, ses)
 
 # %%
+# Results
+# x_0 = 10: pred = 900.86, se = 56.19
+# x_0 = 18: pred = 958.70, se = 56.40
+# x_0 = 25: pred = 1010.04, se = 61.58
