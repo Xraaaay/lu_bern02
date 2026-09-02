@@ -41,7 +41,7 @@ def local_regression(x, y, k, x_0):
 def cross_validate():
     return 15
 
-# %% Loda Data
+# %% Load Data
 data_path = "./data/pollution_cleaneddata.csv"
 df = pd.read_csv(data_path, delimiter=',', dtype=float)
 df = df.sort_values(by="POOR")
