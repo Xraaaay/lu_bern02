@@ -51,6 +51,8 @@ k = cross_validate()  # number of neighboring points
 x_0_list = [10, 18, 25]  # values for prediction
 
 # %% Plot
+fig, ax = plt.subplots()
+ax.scatter(x, y)
 
 # %% Calculation
 preds = []
