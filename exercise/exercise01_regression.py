@@ -30,7 +30,8 @@ def local_regression(x_global, y_global, k, x_0):
 
     # calculate predicted value and standard deviation
     pred = beta_0 + beta_1 * x_0
-    se = np.sqrt(np.sum(K * (y - beta_0 - beta_1 * x)**2) / (k - 2))
+    residual = y - beta_0 - beta_1 * x
+    se = np.sqrt(np.sum(K * residual**2) / (k - 2))
     return pred, se
 
 # %% Cross Validation
@@ -64,6 +65,6 @@ ax.plot(x_0_grid, y_pred)
 
 # %% 
 # Results
-# x_0 = 10: pred = 899.79, se = 59.25
-# x_0 = 18: pred = 956.16, se = 59.37
-# x_0 = 25: pred = 1011.09, se = 62.67
+# x_0 = 10: pred = 899.79, se = 48.24
+# x_0 = 18: pred = 956.16, se = 35.82
+# x_0 = 25: pred = 1011.09, se = 49.65
