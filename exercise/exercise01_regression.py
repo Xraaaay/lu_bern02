@@ -3,11 +3,14 @@
 Created on 2026-09-01
 @author: Ruowen Xiao
 """
+# %%
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from scipy.optimize import minimize
 
+# %% Local Regression Function
 def local_regression(x, y, k, x_0):
     # choose k points nearest to x0
     index = np.argsort(np.abs(x - x_0))[:k]
@@ -33,16 +36,29 @@ def local_regression(x, y, k, x_0):
     se = 0  # TODO
     return pred, se
 
+# %% Cross Validation
+def cross_validate():
+    return 20
+
+# %% Loda Data
 data_path = "./data/pollution_cleaneddata.csv"
 df = pd.read_csv(data_path, delimiter=',', dtype=float)
 df = df.sort_values(by="POOR")
 
 x = df["POOR"].to_numpy()  # observations of predictor
 y = df["MORT"].to_numpy()  # observations of response
-k = 20  # TODO: number of neighboring points
+k = cross_validate()  # number of neighboring points
+x_0_list = [10, 18, 25]  # values for prediction
 
-x_0_index = 6  # values for prediction 10/18/25 percent
-x_0 = 10
+# %% Plot
 
-pred, se = local_regression(x, y, k, x_0)
-print(pred)
+# %% Calculation
+preds = []
+ses = []
+for x_0 in x_0_list:
+    pred, se = local_regression(x, y, k, x_0)
+    preds.append(pred)
+    ses.append(se)
+print(preds, ses)
+
+# %%
