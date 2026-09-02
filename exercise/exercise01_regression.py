@@ -11,29 +11,26 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 
 # %% Local Regression Function
-def local_regression(x, y, k, x_0):
+def local_regression(x_global, y_global, k, x_0):
     # choose k points nearest to x0
-    index = np.argsort(np.abs(x - x_0))[:k]
-    x = x[index]
-    y = y[index]
+    index = np.argsort(np.abs(x_global - x_0))[:k]
+    x = x_global[index]
+    y = y_global[index]
 
     # weight
     h = np.max(np.abs(x - x_0))
     K = (1 - np.abs((x - x_0) / h)**3)**3
 
     # find beta_1 and beta_0
-    def cal_error(args):
-        beta_0, beta_1 = args
-        y_hat = beta_0 + beta_1 * x
-        return np.sum(K * (y - y_hat)**2)
-
-    result = minimize(cal_error, x0=[0, 0])
-    beta_0, beta_1 = result.x
-    # print(f"beta_0 = {beta_0}, beta_1 = {beta_1}")
+    x_w_mean = np.sum(K * x) / np.sum(K)
+    y_w_mean = np.sum(K * y) / np.sum(K)
+    beta_1 = np.sum(K * (x - x_w_mean) * (y - y_w_mean)) / np.sum(K * (x - x_w_mean)**2)
+    beta_0 = y_w_mean - beta_1 * x_w_mean
+    print(f"[{beta_0} {beta_1}]")
 
     # calculate predicted value and standard deviation
     pred = beta_0 + beta_1 * x_0
-    se = np.sqrt(np.sum((y - beta_0 - beta_1 * x)**2) / (k - 2))
+    se = np.sqrt(np.sum(K * (y - beta_0 - beta_1 * x)**2) / (k - 2))
     return pred, se
 
 # %% Cross Validation
