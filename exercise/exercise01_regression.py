@@ -18,7 +18,7 @@ def local_regression(x, y, k, x_0):
     y = y[index]
 
     # weight
-    h = np.max(x) - np.min(x)
+    h = np.max(np.abs(x - x_0))
     K = (1 - np.abs((x - x_0) / h)**3)**3
 
     # find beta_1 and beta_0
@@ -29,7 +29,7 @@ def local_regression(x, y, k, x_0):
 
     result = minimize(cal_error, x0=[0, 0])
     beta_0, beta_1 = result.x
-    print(f"beta_0 = {beta_0}, beta_1 = {beta_1}")
+    # print(f"beta_0 = {beta_0}, beta_1 = {beta_1}")
 
     # calculate predicted value and standard deviation
     pred = beta_0 + beta_1 * x_0
@@ -51,21 +51,22 @@ y = df["MORT"].to_numpy()  # observations of response
 k = cross_validate()  # number of neighboring points
 x_0_list = [10, 18, 25]  # values for prediction
 
+# %% Calculation
+results = [local_regression(x, y, k, x_0) for x_0 in x_0_list]
+print(results)
+
 # %% Plot
+x_0_grid = np.linspace(x.min(), x.max(), 20)
+y_pred = np.array([local_regression(x, y, k, x_0)[0] for x_0 in x_0_grid])
+print(x_0_grid)
+print(y_pred)
+
 fig, ax = plt.subplots()
 ax.scatter(x, y)
+ax.plot(x_0_grid, y_pred)
 
-# %% Calculation
-preds = []
-ses = []
-for x_0 in x_0_list:
-    pred, se = local_regression(x, y, k, x_0)
-    preds.append(pred)
-    ses.append(se)
-print(preds, ses)
-
-# %%
+# %% 
 # Results
-# x_0 = 10: pred = 900.86, se = 56.19
-# x_0 = 18: pred = 958.70, se = 56.40
-# x_0 = 25: pred = 1010.04, se = 61.58
+# x_0 = 10: pred = 899.79, se = 59.25
+# x_0 = 18: pred = 956.16, se = 59.37
+# x_0 = 25: pred = 1011.09, se = 62.67
