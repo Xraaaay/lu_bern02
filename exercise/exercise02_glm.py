@@ -35,10 +35,28 @@ def poisson_glm(x, y):
 beta0, beta1 = poisson_glm(x=years_centered, y=counts)
 print(beta0, beta1)
 
-# %% Simulation
+# %% Simulation and Write Data
+lambdas = np.exp(beta0 + beta1 * years_centered)
+rng = np.random.default_rng()
+
+samples = []
+for i in range(1, 4):
+    counts_sim = rng.poisson(lam=lambdas)
+    sample = pd.DataFrame({
+        "year": years,
+        "counts": counts_sim,
+        "simulation": i
+    })
+    samples.append(sample)
+
+df = pd.concat(samples)
+df.to_csv("./data/bird_samples.csv")
 
 # %% Plot
 fig, ax = plt.subplots()
 ax.scatter(years, counts)
+for sample in samples:
+    counts_sim = sample["counts"].to_numpy(dtype=int)
+    ax.scatter(years, counts_sim)
 
-# %% Write Data
+# %%
