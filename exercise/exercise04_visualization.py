@@ -6,7 +6,6 @@ Created on 2026-09-17
 
 # %% import packages
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import requests
 
@@ -33,7 +32,7 @@ df_ordered = df.sort_values(by=emissions)
 
 fig, ax = plt.subplots(figsize=(12, 12))
 
-colors = 2 * list(plt.colormaps["tab20c"].colors)
+colors = 2 * list(plt.colormaps["tab20c"].colors)  # type: ignore
 bars = ax.barh(df_ordered["entity"], df_ordered[emissions], color=colors[:len(df)])
 ax.bar_label(bars, fmt="%.2f kg", padding=3)
 
