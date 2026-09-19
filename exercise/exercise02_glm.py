@@ -54,9 +54,10 @@ df.to_csv("./data/bird_samples.csv")
 
 # %% Plot
 fig, ax = plt.subplots()
-ax.scatter(years, counts)
+ax.plot(years, counts)
 for sample in samples:
     counts_sim = sample["counts"].to_numpy(dtype=int)
-    ax.scatter(years, counts_sim)
+    ax.plot(years, counts_sim)
+ax.legend(["observation", "sample1", "sample2", "sample3"])
 
 # %%
